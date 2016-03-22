@@ -1,0 +1,74 @@
+.index_text_box {
+    width: 240px;
+    height: 30px;
+    border-radius: 6px;
+    float: left;
+    padding-left: 10px;
+    margin-left: 22px;
+}
+
+.deep_text_box {
+    width: 240px;
+    height: 30px;
+    border-radius: 6px;
+    float: left;
+    padding-left: 10px;
+    margin-left: 65px;
+}
+
+.index_button {
+    width: 100px;
+    height: 25px;
+    float: left;
+    background: #105180;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-left: 285px;
+    margin-top: 18px;
+    padding: 6px;
+    text-align: center;
+}
+
+.index_button:active {
+    opacity: 0.4;
+}
+
+.index_button:hover {
+    background: #03406A;
+}
+
+.main {
+    width: 400px;
+    height: 180px;
+    border-radius: 8px;
+    padding: 10px;
+    margin: auto;
+    background: #65A5D1;
+    margin-top: 60px;
+}
+
+.path_to_res_label {
+    float: left;
+    margin-top: 5px;
+}
+
+.path_to_res_div {
+    float: left;
+    margin-top: 15px;
+}
+
+.deep_div {
+    float: left;
+    margin-top: 30px;
+}
+
+.deep_label {
+    float: left;
+    margin-top: 5px;
+}
+
+.main_font {
+    font-family: cursive;
+    color: white;
+    cursor: pointer;
+}
