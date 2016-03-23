@@ -28,14 +28,10 @@ class PageParser {
     public PageParser(@NonNull String resourceUrl) throws IOException {
         this.url = new URL(resourceUrl);
 
-        InputStream inputStream = url.openStream();
-
-        try {
+        try (InputStream inputStream = url.openStream()) {
             String html = IOUtils.toString(inputStream, "UTF-8");
 
             this.document = Jsoup.parse(html);
-        } finally {
-            IOUtils.closeQuietly(inputStream);
         }
     }
 

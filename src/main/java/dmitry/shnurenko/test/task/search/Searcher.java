@@ -26,7 +26,7 @@ import java.util.Map;
 @Component
 public class Searcher {
 
-    private static final int HINTS_PER_PAGE = 10;
+    private static final int HINTS_PER_PAGE = 100;
 
     private final IndexedPages        indexedPages;
     private final LuceneParamProvider luceneParamProvider;
@@ -48,26 +48,26 @@ public class Searcher {
      */
     @NonNull
     public Map<String, String> search(@NonNull String textToSearch) throws IOException, ParseException {
-        IndexReader reader = DirectoryReader.open(luceneParamProvider.getDirectory());
-        IndexSearcher searcher = new IndexSearcher(reader);
-
         Map<String, String> result = new HashMap<>();
 
-        for (Map.Entry<String, String> entry : indexedPages.get().entrySet()) {
-            String resourceUrl = entry.getKey();
-            String pageTitle = entry.getValue();
+        try (IndexReader reader = DirectoryReader.open(luceneParamProvider.getDirectory())) {
+            IndexSearcher searcher = new IndexSearcher(reader);
 
-            Query query = new QueryParser(resourceUrl, luceneParamProvider.getAnalyzer()).parse(textToSearch);
+            for (Map.Entry<String, String> entry : indexedPages.get().entrySet()) {
+                String resourceUrl = entry.getKey();
+                String pageTitle = entry.getValue();
 
-            TopDocs docs = searcher.search(query, HINTS_PER_PAGE);
-            ScoreDoc[] hits = docs.scoreDocs;
+                QueryParser queryParser = new QueryParser(pageTitle, luceneParamProvider.getAnalyzer());
+                Query query = queryParser.parse(textToSearch);
 
-            if (hits.length > 0) {
-                result.put(pageTitle, resourceUrl);
+                TopDocs docs = searcher.search(query, HINTS_PER_PAGE);
+                ScoreDoc[] hits = docs.scoreDocs;
+
+                if (hits.length > 0) {
+                    result.put(pageTitle, resourceUrl);
+                }
             }
         }
-
-        reader.close();
 
         return result;
     }

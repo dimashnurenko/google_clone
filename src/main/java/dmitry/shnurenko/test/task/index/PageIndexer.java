@@ -69,7 +69,7 @@ public class PageIndexer {
             indexedPages.add(resourceUrl, pageTitle);
 
             Document document = new Document();
-            document.add(new TextField(resourceUrl, plainText, Field.Store.YES));
+            document.add(new TextField(pageTitle, plainText, Field.Store.YES));
 
             indexInternalLinks(parser, --deep);
 

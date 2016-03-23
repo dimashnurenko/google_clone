@@ -23,6 +23,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("/")
 public class GoogleCloneController {
 
+    private static final int MAX_DEEP = 3;
+
     @Autowired
     private PageIndexer pageIndexer;
     @Autowired
@@ -44,6 +46,9 @@ public class GoogleCloneController {
     public void indexPage(@RequestParam("q") String resourceUrl,
                           @RequestParam(value = "deep",
                                         defaultValue = "1") int deep) throws IOException {
+        if (deep > MAX_DEEP) {
+            throw new IllegalArgumentException("Deep must be in range 1-3 the value " + deep + " is not allowed");
+        }
         if (!URLValidator.isUrlValid(resourceUrl)) {
             throw new IllegalArgumentException("URL " + resourceUrl + " is not valid.");
         }
