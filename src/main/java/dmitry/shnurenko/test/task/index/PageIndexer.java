@@ -75,6 +75,8 @@ public class PageIndexer {
 
             indexWriter.addDocument(document);
         } catch (IOException exception) {
+            Thread.currentThread().interrupt();
+
             logger.error("Can not index " + resourceUrl + "__________" + exception.getLocalizedMessage());
         }
     }
@@ -101,7 +103,7 @@ public class PageIndexer {
     }
 
     public void close() throws IOException {
-        executor.shutdown();
+        executor.shutdownNow();
 
         if (indexWriter != null) {
             indexWriter.close();
