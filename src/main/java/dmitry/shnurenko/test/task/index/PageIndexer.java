@@ -1,16 +1,18 @@
 package dmitry.shnurenko.test.task.index;
 
-import dmitry.shnurenko.test.task.common.IndexedPages;
 import dmitry.shnurenko.test.task.common.LuceneParamProvider;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,23 +29,23 @@ import java.util.concurrent.Executors;
  * @author Dmitry Shnurenko
  */
 @Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class PageIndexer {
     private static final Logger logger = LogManager.getLogger(PageIndexer.class);
 
-    private final IndexedPages        indexedPages;
     private final LuceneParamProvider luceneParamProvider;
 
     private ExecutorService executor;
     private IndexWriter     indexWriter;
 
     @Autowired
-    public PageIndexer(LuceneParamProvider luceneParamProvider, IndexedPages indexedPages) {
-        this.indexedPages = indexedPages;
+    public PageIndexer(LuceneParamProvider luceneParamProvider) {
         this.luceneParamProvider = luceneParamProvider;
     }
 
     public void initIndexer() throws IOException {
         IndexWriterConfig config = new IndexWriterConfig(luceneParamProvider.getAnalyzer());
+        config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         indexWriter = new IndexWriter(luceneParamProvider.getDirectory(), config);
         executor = Executors.newCachedThreadPool();
     }
@@ -56,7 +58,7 @@ public class PageIndexer {
      * @param deep        deep of indexing
      */
     public void indexPage(@NonNull String resourceUrl, int deep) {
-        if (deep < 1 || indexedPages.contains(resourceUrl)) {
+        if (deep < 1) {
             return;
         }
 
@@ -66,14 +68,14 @@ public class PageIndexer {
             String plainText = parser.getPlainText();
             String pageTitle = parser.getPageTitle();
 
-            indexedPages.add(resourceUrl, pageTitle);
-
             Document document = new Document();
-            document.add(new TextField(pageTitle, plainText, Field.Store.YES));
-
-            indexInternalLinks(parser, --deep);
+            document.add(new TextField("content", plainText, Field.Store.YES));
+            document.add(new StringField("url", resourceUrl, Field.Store.YES));
+            document.add(new StringField("title", pageTitle, Field.Store.YES));
 
             indexWriter.addDocument(document);
+
+            indexInternalLinks(parser, --deep);
         } catch (IOException exception) {
             Thread.currentThread().interrupt();
 

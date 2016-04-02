@@ -5,9 +5,10 @@ else if (window.attachEvent)
 
 function init() {
     var searchResult = $(".search_result");
+    var query;
 
     $(".search_button").click(function () {
-        var query = $(".search_text_box").val();
+        query = $(".search_text_box").val();
 
         if (!query || query.length == 0) {
             return;
@@ -32,14 +33,14 @@ function init() {
                     return;
                 }
 
-                for (var title in results) {
-                    if (!results.hasOwnProperty(title)) {
+                for (var i in results) {
+                    if (!results.hasOwnProperty(i)) {
                         continue;
                     }
 
-                    var url = results[title];
+                    var result = results[i];
 
-                    createWidget(title, url, ++id);
+                    createWidget(result, ++id);
                 }
             },
             error: function () {
@@ -50,7 +51,25 @@ function init() {
         });
     });
 
-    function createWidget(title, url, id) {
+    function isEmpty(obj) {
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        if (obj == null) return true;
+        if (obj.length > 0)    return false;
+        if (obj.length === 0)  return true;
+
+        for (var key in obj) {
+            if (hasOwnProperty.call(obj, key)) return false;
+        }
+
+        return true;
+    }
+
+    function createWidget(result, id) {
+        var title = result["pageTitle"];
+        var link = result["link"];
+        var hits = result["hits"];
+
         var mainElementId = "main" + id;
         var urlId = "id" + id;
         var titleId = "title" + id;
@@ -69,21 +88,57 @@ function init() {
         mainElement.append('<div id=' + titleId + ' class="title">')
             .append('<div id=' + urlId + ' class="url">');
 
-        $("#" + urlId).text(url);
+        $("#" + urlId).text(link);
         $("#" + titleId).text(typeof title === 'undefined' || title === "" ? "Title" : title);
+
+        createMatchesWidget(mainElement, hits, id);
     }
 
-    function isEmpty(obj) {
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+    function createMatchesWidget(mainElement, hits, id) {
+        var matchesId = "matches" + id;
 
-        if (obj == null) return true;
-        if (obj.length > 0)    return false;
-        if (obj.length === 0)  return true;
+        mainElement.append('<div id=' + matchesId + ' class="matches">');
 
-        for (var key in obj) {
-            if (hasOwnProperty.call(obj, key)) return false;
+        for (var hitIndex in hits) {
+            if (!hits.hasOwnProperty(hitIndex)) {
+                continue;
+            }
+
+            var hit = hits[hitIndex];
+
+            var words = hit.split(" ");
+
+            for (var wordIndex in words) {
+                if (!words.hasOwnProperty(wordIndex)) {
+                    continue;
+                }
+
+                var word = words[wordIndex];
+
+                var wordId = matchesId + hitIndex + wordIndex;
+
+                $("#" + matchesId).append('<div id=' + wordId + ' class="word">');
+                var wordElement = $("#" + wordId);
+                wordElement.text(word);
+
+                selectMatchedWord(word, wordId);
+            }
         }
+    }
 
-        return true;
+    function selectMatchedWord(word, wordId) {
+        var queryWords = query.split(" ");
+
+        for (var i in queryWords) {
+            if (!queryWords.hasOwnProperty(i)) {
+                continue
+            }
+
+            var queryWord = queryWords[i];
+
+            if (queryWord === word) {
+                $("#" + wordId).attr("style", "background: yellow");
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 package dmitry.shnurenko.test.task.index;
 
-import dmitry.shnurenko.test.task.util.URLValidator;
+import dmitry.shnurenko.test.task.util.Utils;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +23,8 @@ import java.util.Set;
  * @author Dmitry Shnurenko
  */
 class PageParser {
+
+    private static final Logger logger = LogManager.getLogger(PageParser.class);
 
     private final Document document;
     private final URL      url;
@@ -63,7 +67,7 @@ class PageParser {
         for (Element link : links) {
             String href = link.attr("href");
 
-            if (URLValidator.isUrlValid(href)) {
+            if (Utils.isUrlValid(href)) {
                 allLinks.add(href);
             }
 
@@ -77,8 +81,8 @@ class PageParser {
         if (href.startsWith("/")) {
             try {
                 allLinks.add(new URL(url, href).toString());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+            } catch (MalformedURLException exception) {
+                logger.error(exception.getLocalizedMessage());
             }
         }
     }

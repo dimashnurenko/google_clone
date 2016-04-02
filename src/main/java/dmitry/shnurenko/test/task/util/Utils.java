@@ -6,16 +6,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * The class provides method which allows to validate URL in according to URL convention.
+ * The class provides business logic general for all application.
  *
  * @author Dmitry Shnurenko
  */
-public class URLValidator {
+public class Utils {
 
     private static final Pattern URL_PATTERN = Pattern.compile("(https?:\\/\\/(?:www\\.|(?!www))[^\\s\\.]+\\.[^\\s]" +
                                                                "{2,}|www\\.[^\\s]+\\.[^\\s]{2,})");
 
-    private URLValidator() {
+    private Utils() {
         throw new UnsupportedOperationException("Can't create instance of util class: " + getClass());
     }
 

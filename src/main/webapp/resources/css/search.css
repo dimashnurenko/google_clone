@@ -95,7 +95,7 @@
     color: yellow;
 }
 
-.search_result{
+.search_result {
     width: 100%;
     height: 100%;
     float: left;
@@ -104,7 +104,7 @@
 .element {
     width: 100%;
     height: 50px;
-    margin-top: 30px;
+    margin-top: 50px;
     cursor: pointer;
 }
 
@@ -121,7 +121,7 @@
 
 .title {
     width: 100%;
-    height: 25px;
+    height: 17px;
     float: left;
     text-align: left;
     overflow: hidden;
@@ -129,4 +129,25 @@
     text-overflow: ellipsis;
     color: blue;
     font-weight: bolder;
+}
+
+.matches {
+    width: 100%;
+    height: 38px;
+    float: left;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.word {
+    float: left;
+    color: grey;
+    font-weight: lighter;
+    padding-right: 5px
+}
+
+.matched {
+    background: yellow;
 }
