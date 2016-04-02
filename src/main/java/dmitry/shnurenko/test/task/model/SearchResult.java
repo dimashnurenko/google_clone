@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @author Dmitry Shnurenko
  */
-public class SearchResult implements Serializable {
+public final class SearchResult implements Serializable {
 
     /**
      * Defines count of strings which will be added in search result.
@@ -29,31 +29,19 @@ public class SearchResult implements Serializable {
     private String      link;
     private Set<String> hits;
 
-    protected SearchResult() {
+    SearchResult() {
     }
 
     public String getPageTitle() {
         return pageTitle;
     }
 
-    public void setPageTitle(String pageTitle) {
-        this.pageTitle = pageTitle;
-    }
-
     public String getLink() {
         return link;
     }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
-
     public Set<String> getHits() {
         return hits;
-    }
-
-    public void setHits(Set<String> hits) {
-        this.hits = hits;
     }
 
     public static SearchResultBuilder newBuilder() {
