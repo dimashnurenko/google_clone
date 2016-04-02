@@ -48,11 +48,11 @@ class PageParser {
     }
 
     /**
-     * Returns plain text representation of page.
+     * Returns plain text representation of page. The method returns text in lower case only.
      */
     @NonNull
     public String getPlainText() throws IOException {
-        return document.text();
+        return document.text().toLowerCase();
     }
 
     /**

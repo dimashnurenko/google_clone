@@ -67,13 +67,13 @@ public class SearchResult implements Serializable {
 
         SearchResult that = (SearchResult) other;
 
-        return Objects.equals(link, that.link) && Objects.equals(pageTitle, that.pageTitle);
+        return Objects.equals(pageTitle, that.pageTitle);
 
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(link, pageTitle);
+        return Objects.hash(pageTitle);
     }
 
     public class SearchResultBuilder {

@@ -63,6 +63,6 @@ public class GoogleCloneController {
                     path = "/search")
     @ResponseBody
     public Set<SearchResult> searchText(@RequestParam("q") String textToSearch) throws IOException, ParseException {
-        return searcher.search(textToSearch);
+        return searcher.search(textToSearch.toLowerCase());
     }
 }
