@@ -136,7 +136,7 @@ function init() {
 
             var queryWord = queryWords[i];
 
-            if (queryWord === word) {
+            if (queryWord.toLowerCase() === word) {
                 $("#" + wordId).attr("style", "background: yellow");
             }
         }
