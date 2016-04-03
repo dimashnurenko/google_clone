@@ -23,6 +23,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 /**
  * The class provides business logic which allows index page via Lucene.
  *
@@ -47,7 +49,7 @@ public class PageIndexer {
         IndexWriterConfig config = new IndexWriterConfig(luceneParamProvider.getAnalyzer());
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         indexWriter = new IndexWriter(luceneParamProvider.getDirectory(), config);
-        executor = Executors.newCachedThreadPool();
+        executor = Executors.newFixedThreadPool(20);
     }
 
     /**
@@ -96,7 +98,7 @@ public class PageIndexer {
         }
 
         try {
-            executor.invokeAll(tasks);
+            executor.invokeAll(tasks, 3_000, MILLISECONDS);
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
 
