@@ -31,7 +31,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * @author Dmitry Shnurenko
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class PageIndexer {
     private static final Logger logger = LogManager.getLogger(PageIndexer.class);
 

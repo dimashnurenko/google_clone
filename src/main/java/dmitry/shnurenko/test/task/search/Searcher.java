@@ -24,7 +24,7 @@ import java.util.Set;
  * @author Dmitry Shnurenko
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Searcher {
 
     private static final int HINTS_PER_PAGE = 100;
